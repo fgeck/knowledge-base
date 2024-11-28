@@ -1,0 +1,20 @@
+site_name: fgeck's Knowledge Base
+site_description: A collection of notes and thoughts on technical topics
+site_url: https://fgeck.github.io/knowledge-base/
+theme:
+  name: material
+plugins:
+  # - codeinclude
+  - search
+
+nav:
+  - Home: index.md
+  - Kubernetes & Docker: k8s-docker/index.md
+  - Kotlin, Java & Gradle:
+      - Coroutines: kotlin/coroutines.md
+      - Java Completable Future: kotlin/java-async.md
+  - Spring: spring/index.md
+  - SQL & Databases: sql-databases/index.md
+  - Shell: shell/index.md
+  - SAP:
+      - Transactions: sap/transactions/index.md
