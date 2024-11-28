@@ -16,5 +16,6 @@ nav:
   - Spring: spring/index.md
   - SQL & Databases: sql-databases/index.md
   - Shell: shell/index.md
+  - IntelliJ: intellij/index.md
   - SAP:
       - Transactions: sap/transactions/index.md
