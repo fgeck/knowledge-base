@@ -17,5 +17,7 @@ nav:
   - SQL & Databases: sql-databases/index.md
   - Shell: shell/index.md
   - IntelliJ: intellij/index.md
+  - Networking:
+    - Custom Domain for Email: networking/custom_comain_email-gmail.md
   - SAP:
       - Transactions: sap/transactions/index.md
