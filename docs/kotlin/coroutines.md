@@ -2,6 +2,35 @@
 
 Coroutines behave like Threads but they are not Threads. They can be called lightweight Threads. When a Coroutine sleeps the coroutine will be slept but the Thread will be freed up again. After the sleep the Coroutine continue may in another Thread. You can run millions of Coroutines, but not millions of Threads.
 
+## Logging with SLF4J
+
+Logging is quite simple but needs to be considered when launching coroutines.
+Reference can be found [here](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-slf4j/kotlinx.coroutines.slf4j/-m-d-c-context/)
+
+```kotlin
+MDC.put("kotlin", "rocks") // Put a value into the MDC context
+
+launch(MDCContext()) {
+    logger.info { "..." }   // The MDC context contains the mapping here
+}
+------------
+// problematic
+launch(MDCContext()) {
+    MDC.put("key", "value") // This update will be lost
+    delay(100)
+    println(MDC.get("key")) // This will print null
+}
+------------
+// solution
+launch(MDCContext()) {
+    MDC.put("key", "value") // This update will be captured
+    withContext(MDCContext()) {
+        delay(100)
+        println(MDC.get("key")) // This will print "value"
+    }
+}
+```
+
 ## Coroutine Scope and Context
 
 ### Scope
@@ -12,12 +41,12 @@ Coroutines behave like Threads but they are not Threads. They can be called ligh
 ```kotlin
 fun main() = runBlocking {
     val scope = CoroutineScope(Dispatchers.Default)
-    
+
     val job = scope.launch {
         delay(1000L)
         println("Task completed!")
     }
-    
+
     delay(500L)
     scope.cancel()
     println("Scope canceled")
@@ -36,13 +65,13 @@ Combine a dispatcher + coroutine name:
 ```kotlin
 fun main() = runBlocking {
     val context = Dispatchers.Default + CoroutineName("ExampleCoroutine")
-    
+
     val job = launch(context) {
         println("Coroutine context: $coroutineContext")
         delay(1000L)
         println("Task completed!")
     }
-    
+
     job.join()
 }
 ```
@@ -246,7 +275,7 @@ jobs += launch(newSingleThreadContext("myThread")){}
 ```
 
 - `Unconfined` starts in the thread of parent but once a suspending func was called it may continues in another thread
-- use `newSingleThreadContext` **always*- with `use{}` so that it is always closed: `newSingleThreadContext("mySTC").use{}`
+- use `newSingleThreadContext` \*_always_- with `use{}` so that it is always closed: `newSingleThreadContext("mySTC").use{}`
 
 ### Access coroutines
 
