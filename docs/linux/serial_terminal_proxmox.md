@@ -13,7 +13,7 @@ qm set <VM_ID> -serial0 socket
 
 ## Proxmox GUEST VM
 
-* Update grub
+* edit grub
 
 ```bash
 sudo nano /etc/defaults/grub
@@ -25,6 +25,12 @@ sudo nano /etc/defaults/grub
 GRUB_CMDLINE_LINUX_DEFAULT="quiet console=tty0 console=ttyS0,115200n8"
 GRUB_TERMINAL=serial
 GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+```
+
+* update grub
+
+```bash
+sudo update-grub
 ```
 
 * Create the service
