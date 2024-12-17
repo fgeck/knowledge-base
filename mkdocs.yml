@@ -3,6 +3,10 @@ site_description: A collection of notes and thoughts on technical topics
 site_url: https://fgeck.github.io/knowledge-base/
 theme:
   name: material
+  features:
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
 plugins:
   # - codeinclude
   - search
@@ -18,6 +22,8 @@ nav:
   - Shell: shell/index.md
   - IntelliJ: intellij/index.md
   - Networking:
-    - Custom Domain for Email: networking/custom_comain_email-gmail.md
+      - Custom Domain for Email: networking/custom_comain_email-gmail.md
+  - Linux:
+      - Setting Up a Serial Terminal in Proxmox: linux/serial_terminal_proxmox.md
   - SAP:
       - Transactions: sap/transactions/index.md
