@@ -1,0 +1,2227 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A collection of notes and thoughts on technical topics">
+      
+      
+      
+        <link rel="canonical" href="https://fgeck.github.io/knowledge-base/kotlin/coroutines/">
+      
+      
+        <link rel="prev" href="../../k8s-docker/">
+      
+      
+        <link rel="next" href="../java-async/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Coroutines - fgeck's Knowledge Base</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kotlin-coroutines" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="fgeck&#39;s Knowledge Base" class="md-header__button md-logo" aria-label="fgeck's Knowledge Base" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            fgeck's Knowledge Base
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Coroutines
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="fgeck&#39;s Knowledge Base" class="md-nav__button md-logo" aria-label="fgeck's Knowledge Base" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    fgeck's Knowledge Base
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../k8s-docker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubernetes & Docker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Kotlin, Java & Gradle
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Kotlin, Java & Gradle
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Coroutines
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Coroutines
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#logging-with-slf4j" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging with SLF4J
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coroutine-scope-and-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coroutine Scope and Context
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coroutine Scope and Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scope
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Context
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forkjoin-equivalent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fork/Join equivalent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launching-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launching coroutines
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions-and-coroutine-builders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions and Coroutine Builders
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions and Coroutine Builders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runblocking" class="md-nav__link">
+    <span class="md-ellipsis">
+      RunBlocking
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#waiting-join-to-cancel-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waiting, Join-to, Cancel Coroutines
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Waiting, Join-to, Cancel Coroutines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#waiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waiting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cancellation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cancellation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-exceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handle Exceptions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Timeouts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coroutine-contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coroutine Contexts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coroutine Contexts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launch-in-different-contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch in different contexts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access coroutines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parents-childs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parents - Childs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Combine Coroutines
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-data-from-coroutines-compose-funcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Data from Coroutines &amp; compose funcs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Get Data from Coroutines & compose funcs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#define-an-async-func" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define an async func
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lazy-evaluations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lazy evaluations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channels-for-in-coroutine-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Channels for in-coroutine-communication
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Channels for in-coroutine-communication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#make-code-above-easier-with-built-in-producerjob" class="md-nav__link">
+    <span class="md-ellipsis">
+      Make code above easier with built-in ProducerJob
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipelining-data-from-one-coroutine-to-another" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipelining data from one coroutine to another
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-consumers-fan-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple consumers / fan-out
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fan-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fan-In
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buffered-channels-channels-which-do-not-block-until-buffer-is-full" class="md-nav__link">
+    <span class="md-ellipsis">
+      Buffered Channels (channels which do not block until buffer is full)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fairness-of-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fairness of Channels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load-balancing-channels-fan-in-and-fan-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      Load Balancing Channels - Fan-in and Fan-out
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#waiting-on-multiple-coroutines-using-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waiting on multiple coroutines using select
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Waiting on multiple coroutines using select">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Select
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select-with-closed-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Select with closed Channels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-side-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use side Channels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Timeout
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actors
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#actor-to-increment-a-counter-safely" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actor to increment a counter safely
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../java-async/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Java Completable Future
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-databases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SQL & Databases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intellij/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IntelliJ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Networking
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/custom_comain_email-gmail/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Domain for Email
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Linux
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Linux
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/serial_terminal_proxmox/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setting Up a Serial Terminal in Proxmox
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SAP
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            SAP
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sap/transactions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transactions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#logging-with-slf4j" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging with SLF4J
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coroutine-scope-and-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coroutine Scope and Context
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coroutine Scope and Context">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scope
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Context
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forkjoin-equivalent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fork/Join equivalent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launching-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launching coroutines
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions-and-coroutine-builders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions and Coroutine Builders
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions and Coroutine Builders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runblocking" class="md-nav__link">
+    <span class="md-ellipsis">
+      RunBlocking
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#waiting-join-to-cancel-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waiting, Join-to, Cancel Coroutines
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Waiting, Join-to, Cancel Coroutines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#waiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waiting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cancellation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cancellation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handle-exceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handle Exceptions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Timeouts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coroutine-contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coroutine Contexts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coroutine Contexts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launch-in-different-contexts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch in different contexts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#access-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Access coroutines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parents-childs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parents - Childs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-coroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Combine Coroutines
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-data-from-coroutines-compose-funcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Data from Coroutines &amp; compose funcs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Get Data from Coroutines & compose funcs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#define-an-async-func" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define an async func
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lazy-evaluations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lazy evaluations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channels-for-in-coroutine-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Channels for in-coroutine-communication
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Channels for in-coroutine-communication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#make-code-above-easier-with-built-in-producerjob" class="md-nav__link">
+    <span class="md-ellipsis">
+      Make code above easier with built-in ProducerJob
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipelining-data-from-one-coroutine-to-another" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipelining data from one coroutine to another
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-consumers-fan-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple consumers / fan-out
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fan-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fan-In
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buffered-channels-channels-which-do-not-block-until-buffer-is-full" class="md-nav__link">
+    <span class="md-ellipsis">
+      Buffered Channels (channels which do not block until buffer is full)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fairness-of-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fairness of Channels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#load-balancing-channels-fan-in-and-fan-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      Load Balancing Channels - Fan-in and Fan-out
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#waiting-on-multiple-coroutines-using-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waiting on multiple coroutines using select
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Waiting on multiple coroutines using select">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Select
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select-with-closed-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Select with closed Channels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-side-channels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use side Channels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Timeout
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actors
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#actor-to-increment-a-counter-safely" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actor to increment a counter safely
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="kotlin-coroutines">Kotlin Coroutines</h1>
+<p>Coroutines behave like Threads but they are not Threads. They can be called lightweight Threads. When a Coroutine sleeps the coroutine will be slept but the Thread will be freed up again. After the sleep the Coroutine continue may in another Thread. You can run millions of Coroutines, but not millions of Threads.</p>
+<h2 id="logging-with-slf4j">Logging with SLF4J</h2>
+<p>Logging is quite simple but needs to be considered when launching coroutines.
+Reference can be found <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-slf4j/kotlinx.coroutines.slf4j/-m-d-c-context/">here</a></p>
+<pre><code class="language-kotlin">MDC.put(&quot;kotlin&quot;, &quot;rocks&quot;) // Put a value into the MDC context
+
+launch(MDCContext()) {
+    logger.info { &quot;...&quot; }   // The MDC context contains the mapping here
+}
+------------
+// problematic
+launch(MDCContext()) {
+    MDC.put(&quot;key&quot;, &quot;value&quot;) // This update will be lost
+    delay(100)
+    println(MDC.get(&quot;key&quot;)) // This will print null
+}
+------------
+// solution
+launch(MDCContext()) {
+    MDC.put(&quot;key&quot;, &quot;value&quot;) // This update will be captured
+    withContext(MDCContext()) {
+        delay(100)
+        println(MDC.get(&quot;key&quot;)) // This will print &quot;value&quot;
+    }
+}
+</code></pre>
+<h2 id="coroutine-scope-and-context">Coroutine Scope and Context</h2>
+<h3 id="scope">Scope</h3>
+<ul>
+<li>a coroutine must always be started in a scope</li>
+<li>Cancelling a scope cancels all coroutines running in that scope</li>
+</ul>
+<pre><code class="language-kotlin">fun main() = runBlocking {
+    val scope = CoroutineScope(Dispatchers.Default)
+
+    val job = scope.launch {
+        delay(1000L)
+        println(&quot;Task completed!&quot;)
+    }
+
+    delay(500L)
+    scope.cancel()
+    println(&quot;Scope canceled&quot;)
+}
+</code></pre>
+<h3 id="context">Context</h3>
+<ul>
+<li>define behavior of coroutines</li>
+<li>contains elements (dispatchers, job objects) for configuration of coroutine execution</li>
+<li>is an indexed set of elements where each element in the set has a unique key</li>
+<li>contexts can be combined</li>
+</ul>
+<p>Combine a dispatcher + coroutine name:</p>
+<pre><code class="language-kotlin">fun main() = runBlocking {
+    val context = Dispatchers.Default + CoroutineName(&quot;ExampleCoroutine&quot;)
+
+    val job = launch(context) {
+        println(&quot;Coroutine context: $coroutineContext&quot;)
+        delay(1000L)
+        println(&quot;Task completed!&quot;)
+    }
+
+    job.join()
+}
+</code></pre>
+<p>Use a SupervisorJob to make child coroutines independent, so that if one child coroutine fails, it doesn't cause the others to be canceled:</p>
+<pre><code class="language-kotlin">fun main() = runBlocking {
+    val supervisor = SupervisorJob()
+    val scope = CoroutineScope(coroutineContext + supervisor)
+
+    val job1 = scope.launch {
+        delay(500L)
+        println(&quot;Task 1 completed&quot;)
+    }
+
+    val job2 = scope.launch {
+        delay(1000L)
+        throw RuntimeException(&quot;Task 2 failed&quot;)
+    }
+
+    val job3 = scope.launch {
+        delay(1500L)
+        println(&quot;Task 3 completed&quot;)
+    }
+
+    try {
+        joinAll(job1, job2, job3)
+    } catch (e: Exception) {
+        println(&quot;Caught exception: $e&quot;)
+    }
+    supervisor.cancel()
+}
+</code></pre>
+<h2 id="forkjoin-equivalent">Fork/Join equivalent</h2>
+<ul>
+<li>use <code>val x async  { }; x.await()</code> to launch something async and wait for it</li>
+</ul>
+<h2 id="launching-coroutines">Launching coroutines</h2>
+<pre><code class="language-kotlin">// Using threads
+thread {
+    sleep(1000)
+    println(&quot;World&quot;)
+}
+
+print(&quot;Hello, &quot;)
+Thread.sleep(1500)
+
+// Using launch
+launch {
+    delay(1000)             // does not block thread. Only sleeps the coroutine
+    // Thread.sleep(1000)   // we can block the main Thread from a coroutine
+    println(&quot;World&quot;)
+}
+
+print(&quot;Hello, &quot;)
+Thread.sleep(1500)          // blocks main thread
+</code></pre>
+<p><code>launch{}</code> launches the code async immediately. Instead of <code>Thread.sleep</code> we use <code>delay</code>.</p>
+<h2 id="functions-and-coroutine-builders">Functions and Coroutine Builders</h2>
+<h3 id="launch">Launch</h3>
+<ul>
+<li>Coroutines have to be run inside a context</li>
+<li>some funcs can only be called inside coroutines (e.g. <code>delay()</code>). To let the compiler know that this func can only be called in a coroutine we mark them with <code>suspend</code></li>
+<li><code>launch{}</code> runs the code immediately in a coroutine without waiting for it</li>
+</ul>
+<h3 id="runblocking">RunBlocking</h3>
+<ul>
+<li><code>runBlocking{}</code> runs the code inside but waits for it to finish. Can be used to make the whole main func to run in a coroutine and wait for it</li>
+<li>can be used in tests</li>
+</ul>
+<pre><code class="language-kotlin">suspend fun doWork() {}
+
+class SimpleTest {
+    @Test
+    fun aTest() = runBlocking {
+        dowork()
+        assertEquals()
+    }
+}
+</code></pre>
+<h2 id="waiting-join-to-cancel-coroutines">Waiting, Join-to, Cancel Coroutines</h2>
+<h3 id="waiting">Waiting</h3>
+<ul>
+<li>Join: calling code blocks until coroutine is finished. <code>launch{}</code> returns <code>Job</code> which has a <code>join()</code> func.</li>
+</ul>
+<pre><code class="language-kotlin">val job = launch {delay(1000); println(&quot;World&quot;)}
+println(&quot;Hello&quot;)
+job.join()
+</code></pre>
+<h3 id="cancellation">Cancellation</h3>
+<ul>
+<li>We must check if a coroutine is cancellable. This has to be checked in a suspending func. This is called cooperative. All built-in funcs are cooperative. Either our suspend func calls a built-in suspend func, or explicitly check if in the job state</li>
+</ul>
+<pre><code class="language-kotlin">val job = launch {
+    delay(10)
+    println(&quot;.&quot;)
+    // Thread.sleep(1)      &lt;- this would not cancel as it is not cooperative
+}
+delay(2500)
+job.cancel()        // request cancellation
+job.join()          // wait for cancellation to happen
+println(&quot;finally done&quot;)
+// fast way
+job.cancelAndJoin()
+</code></pre>
+<ul>
+<li>we can check the cancellation via <code>isActive</code> inside CoroutineScopes</li>
+<li>
+<ol>
+<li><code>yield()</code> can check in a coroutine if we are cancelled and eventually cancel</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>check actively via <code>if(!isActive)</code></li>
+</ol>
+</li>
+</ul>
+<p>In our own code:</p>
+<pre><code class="language-kotlin">// 1
+val job = launch {
+    delay(10)
+    println(&quot;.&quot;)
+    yield()     // checks for cancellation and may cancel
+    Thread.sleep(11111)
+}
+// 2
+val job = launch {
+    delay(10)
+    println(&quot;.&quot;)
+    if(!isActive) throw CancellationException // or: reaturn@launch
+    Thread.sleep(11111)
+}
+</code></pre>
+<h3 id="handle-exceptions">Handle Exceptions</h3>
+<ul>
+<li>Nice for closing resources: wrap async code in try/catch, on CancellationException close resources. This must be non cancellable.</li>
+<li>we can pass Exceptions to cancel(), but if they are not caught we will kill the app. Never use anything else than <code>CancellationException</code> as a reason for <code>cancel()</code></li>
+</ul>
+<pre><code class="language-kotlin">try {
+    val job = launch {
+        delay(10)
+        println(&quot;.&quot;)
+        yield()     // checks for cancellation and may cancel
+        Thread.sleep(11111)
+    }
+} catch(ex: CancellationException) {
+    println(&quot;Cancelled&quot;)
+} finally {
+    run(NonCancellable) { // now this is not cancellable by another coroutine
+        println(&quot;Finally&quot;)
+    }
+}
+</code></pre>
+<h3 id="timeouts">Timeouts</h3>
+<pre><code class="language-kotlin">val job = withTimeoutOrNull(100) {
+    delay(10)
+    println(&quot;.&quot;)
+    yield()     // checks for cancellation and may cancel
+    Thread.sleep(11111)
+}
+if(job == null) {
+    println(&quot;timedout&quot;)
+}
+delay(1000)
+</code></pre>
+<h2 id="coroutine-contexts">Coroutine Contexts</h2>
+<ul>
+<li>all coroutines run as part of context, defined by launcher</li>
+<li>context can flow to child coroutines</li>
+<li>contexts can be joined</li>
+</ul>
+<h3 id="launch-in-different-contexts">Launch in different contexts</h3>
+<pre><code class="language-kotlin">// default
+jobs += launch{}
+// default
+jobs += launch(DefaultDispatcher){}
+// not confined -&gt; main thread or where parent was started
+jobs+= launch(Unconfined){}
+// context of parent (e.g. runBlocking)
+jobs += launch(coroutineContext){}
+// ForkJoinPool.commonPool
+jobs += launch(CommonPool){}
+// dedicated thread (expensive operation and thread has to be managed)
+jobs += launch(newSingleThreadContext(&quot;myThread&quot;)){}
+</code></pre>
+<ul>
+<li><code>Unconfined</code> starts in the thread of parent but once a suspending func was called it may continues in another thread</li>
+<li>use <code>newSingleThreadContext</code> *<em>always</em>- with <code>use{}</code> so that it is always closed: <code>newSingleThreadContext("mySTC").use{}</code></li>
+</ul>
+<h3 id="access-coroutines">Access coroutines</h3>
+<ul>
+<li><code>coroutineContext</code> is available in coroutines</li>
+</ul>
+<pre><code class="language-kotlin">val job = launch {
+    println(&quot;IsActive: ${coroutineContext[job.Key]!!.isActive}&quot;)
+}
+job.join()
+</code></pre>
+<h3 id="parents-childs">Parents - Childs</h3>
+<pre><code class="language-kotlin">val outer = launch{
+    launch(coroutineContext) { // &lt;---pass context to child
+        repeat(1000) {
+            print('.')
+            delay(1)
+        }
+    }
+}
+outer.join() // &lt;--- wait on outer coroutine which waits for the inner coroutine
+outer.cancelAndJoin() // &lt;--- cancels both due to relationship
+outer.cancelChildren() // &lt;--- cancel only childs
+println('finished')
+</code></pre>
+<ul>
+<li>when children are cancelled, exceptions are propagated to parent</li>
+</ul>
+<h3 id="combine-coroutines">Combine Coroutines</h3>
+<ul>
+<li>contexts are maps and can be combined</li>
+<li>keys will be overridden</li>
+<li>missing keys are not added</li>
+<li>order may be important</li>
+</ul>
+<pre><code class="language-kotlin">runBlocking {
+    val job = launch(CoroutineName(&quot;myCoroutine&quot;)+ coroutineContext)
+}
+</code></pre>
+<h2 id="get-data-from-coroutines-compose-funcs">Get Data from Coroutines &amp; compose funcs</h2>
+<ul>
+<li>launch builder starts coroutine and returns job</li>
+<li>async coroutine builder returns Deferred which can be used later. Deferred inherits from Job</li>
+</ul>
+<pre><code class="language-kotlin">suspend doSth1(): Int {
+    delay(100)
+    println(&quot;working 1&quot;)
+    return Random(System.currentTimeMillis()).nextInt(42)
+}
+
+suspend doSth2(): Int {
+    delay(200)
+    println(&quot;working 2&quot;)
+    return Random(System.currentTimeMillis()).nextInt(42)
+}
+
+fun main(args: Array&lt;String&gt;) {
+    val job = launch {
+        // start both async, wait for both
+        val r1:Deferred&lt;Int&gt; = async{ doSth1() }
+        val r2 = async{ doSth2() }
+        println(&quot;result ${r1.await() + r2.await()}&quot;)
+    }
+    job.join()
+}
+</code></pre>
+<ul>
+<li>async jobs run concurrently. If we wait for them we block until this async is done</li>
+</ul>
+<h3 id="define-an-async-func">Define an async func</h3>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    val result = doWorkAsync(&quot;wasd&quot;)
+    runBlocking { // we need to setup a coroutine to access the Deferred values
+        println(result.await())
+    }
+}
+
+// not a suspend func, but using coroutine builder
+fun doWorkAsync(msg: String): Deferred&lt;Int&gt; = async {
+        println(msg)
+        delay(100)
+        return@async 42
+    }
+</code></pre>
+<h3 id="lazy-evaluations">Lazy evaluations</h3>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    val job = launch {
+        val result = async(coroutineContext){ doWorkLazy(&quot;wasd&quot;) } // define as child, so that main coroutine waits
+        println(&quot;Result: ${result.await()}&quot;)
+        val result2 = async(start = CoroutineStart.LAZY) { doWorkLazy(&quot;wasd&quot;) } // this is only started when await is called!!!!
+    }
+    job.join()
+}
+
+// not a suspend func, but using coroutine builder
+suspend fun doWorkLazy(msg: String): Int {
+        println(msg)
+        delay(100)
+        return 42
+    }
+</code></pre>
+<h2 id="channels-for-in-coroutine-communication">Channels for in-coroutine-communication</h2>
+<ul>
+<li>you can send/receive to/from a channel</li>
+<li>channels block</li>
+<li>can create buffer channels</li>
+<li>need to know when channel has finished</li>
+</ul>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    val channel = Channel&lt;Int&gt;()
+
+    val job = launch {
+        for(x in 1..5) {
+            print(&quot;send $x&quot;)
+            channel.send(x) // channel is then blocked until someone receives the value
+        }
+        // always close a channel
+        channel.close()
+    }
+    // not so good as we must know how many items will be sent to the channel
+    repeat(4) {
+        println(&quot;receive&quot; ${channel.receive()}) // unblocks channel so that next item can be send; receive blocks as well. If we want to receive sth. but channel is empty the code waits/blocks until sth. is received
+    }
+    // better approach
+    for(y in channel) {
+        println(&quot;receive&quot; $y)
+    }
+
+    job.join()
+}
+</code></pre>
+<h3 id="make-code-above-easier-with-built-in-producerjob">Make code above easier with built-in <code>ProducerJob</code></h3>
+<pre><code class="language-kotlin">fun produceNumbers(): ProducerJob&lt;Int&gt; = produce {
+    // we are already in a coroutine here
+    for(x in 1..5) {
+        println(&quot;send $x&quot;)
+        send(x)
+    }
+    println(&quot;done&quot;)
+}
+
+fun main(args: Array&lt;String&gt;) {
+    val channel = produceNumbers()
+
+    channel.consumeEach{
+        println(it)
+    }
+    println(&quot;Main done&quot;)
+}
+</code></pre>
+<h3 id="pipelining-data-from-one-coroutine-to-another">Pipelining data from one coroutine to another</h3>
+<pre><code class="language-kotlin">fun produceNumbers(): ProducerJob&lt;Int&gt; = produce {
+    // we are already in a coroutine here
+    val x = 1
+    while(true) {
+        send(x++)
+    }
+}
+
+fun produceSquareNumbers(numbers: ReceiveChannel&lt;Int&gt;): ProducerJob&lt;Int&gt; = produce {
+    // we are already in a coroutine here
+    for (x in numbers) {
+        send(x*x)
+    }
+}
+
+fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    val producer = produceNumbers()
+    val square = produceSquareNumbers(producer)
+
+    for(i in 1..5) {
+        println(square.receive())
+    }
+    square.cancel()
+    producer.cancel()
+    println(&quot;Main done&quot;)
+}
+</code></pre>
+<h3 id="multiple-consumers-fan-out">Multiple consumers / fan-out</h3>
+<pre><code class="language-kotlin">fun produceNumbers() = produce&lt;Int&gt; {
+    var x = 1 // start from 1
+    while (true) {
+        send(x++) // produce next
+        delay(100) // wait 0.1s
+    }
+}
+
+fun consumer(id: Int, channel: ReceiveChannel&lt;Int&gt;) = launch {
+    channel.consumeEach {
+        println(&quot;Processor #$id received $it in thread ${Thread.currentThread().name}&quot;)
+    }
+}
+
+fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    val producer = produceNumbers()
+    repeat(5) { consumer(it, producer) }
+    println(&quot;launched&quot;)
+    delay(950)
+    producer.cancel() // cancel producer coroutine and thus kill them all
+}
+</code></pre>
+<h3 id="fan-in">Fan-In</h3>
+<pre><code class="language-kotlin">suspend fun sendString(channel: SendChannel&lt;String&gt;, s: String, interval: Long) {
+    while (true) {
+        delay(interval)
+        channel.send(s)
+    }
+}
+
+fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    val channel = Channel&lt;String&gt;()
+    launch(coroutineContext) { sendString(channel, &quot;foo&quot;, 200L) }
+    launch(coroutineContext) { sendString(channel, &quot;BAR!&quot;, 500L) }
+    repeat(6) { // receive first six
+        println(channel.receive())
+    }
+    coroutineContext.cancelChildren() // cancel all children to let main finish
+}
+</code></pre>
+<h3 id="buffered-channels-channels-which-do-not-block-until-buffer-is-full">Buffered Channels (channels which do not block until buffer is full)</h3>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    val channel = Channel&lt;Int&gt;(4) // create buffered channel
+    val sender = launch(coroutineContext) {
+        // launch sender coroutine
+        repeat(10) {
+            println(&quot;Sending $it&quot;) // print before sending each element
+            channel.send(it) // will suspend when buffer is full
+        }
+    }
+    // don't receive anything... just wait....
+    delay(1000)
+    launch { repeat(10) { println(&quot; --Receiving ${channel.receive()}&quot;) } }
+    sender.cancel() // cancel sender coroutine
+}
+</code></pre>
+<h3 id="fairness-of-channels">Fairness of Channels</h3>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    val discusison = Channel&lt;Comment&gt;()
+
+    launch(coroutineContext) { child(&quot;he did it&quot;, discussion)}
+    launch(coroutineContext) { child(&quot;she did it&quot;, discussion)}
+
+    discussion.send(Comment(0))
+    delay(1000)
+    coroutineContext.cancel()
+}
+
+suspend fun child(text: String, discussion: Channel) {
+    for(comment in discussion) {
+        comment.count++
+        println(&quot;$text $comment&quot;)
+        delay(300)
+        discussion.send(comment)
+    }
+}
+</code></pre>
+<ul>
+<li>when running this code we will see that every coroutine gets the same amount</li>
+</ul>
+<h3 id="load-balancing-channels-fan-in-and-fan-out">Load Balancing Channels - Fan-in and Fan-out</h3>
+<pre><code class="language-kotlin">data class Work(var x: Long = 0, var y: Long = 0, var z: Long = 0)
+
+val numberOfWorkers = 10
+var totalWork = 20
+val finish = Channel&lt;Boolean&gt;()
+
+var workersRunning = AtomicInteger()
+
+suspend fun worker(input: Channel&lt;Work&gt;, output: Channel&lt;Work&gt;) {
+
+    workersRunning.getAndIncrement()
+    for (w in input) {
+        w.z = w.x - w.y
+        delay(w.z)
+        output.send(w)
+    }
+    workersRunning.getAndDecrement()
+    if(workersRunning.get() === 0)
+    {
+        output.close()
+        println(&quot;Closing output&quot;)
+    }
+}
+
+fun run() {
+    val input = Channel&lt;Work&gt;()
+    val output = Channel&lt;Work&gt;()
+
+    println(&quot;Launch workers&quot;)
+    repeat (numberOfWorkers) {
+        launch { worker(input, output) }
+    }
+    launch { sendLotsOfWork(input) }
+    launch { receiveLotsOfResults(output) }
+}
+
+suspend fun receiveLotsOfResults(channel: Channel&lt;Work&gt;) {
+
+    println(&quot;receiveLotsOfResults start&quot;)
+
+    for(work in channel) {
+        println(&quot;${work.x}*${work.y} = ${work.z}&quot;)
+    }
+    println(&quot;receiveLotsOfResults done&quot;)
+    finish.send(true)
+}
+
+suspend fun sendLotsOfWork(input: Channel&lt;Work&gt;) {
+    repeat(totalWork) {
+        input.send(Work((0L..100).random(), (0L..10).random()))
+    }
+    println(&quot;close input&quot;)
+    input.close()
+}
+
+fun main(args: Array&lt;String&gt;) {
+    run()
+    runBlocking { finish.receive() }
+    println(&quot;main done&quot;)
+}
+
+private object RandomRangeSingleton : Random()
+
+
+fun ClosedRange&lt;Long&gt;.random() = (RandomRangeSingleton.nextInt((endInclusive.toInt() + 1) - start.toInt()) + start)
+</code></pre>
+<h2 id="waiting-on-multiple-coroutines-using-select">Waiting on multiple coroutines using select</h2>
+<h3 id="simple-select">Simple Select</h3>
+<ul>
+<li>allow multiple channels to be awaited on</li>
+<li>select is biased to first channel in list</li>
+</ul>
+<pre><code class="language-kotlin">fun producer1() = produce{
+    while(true) {
+//        delay(200)
+        send(&quot;from producer 1&quot;)
+    }
+}
+
+fun producer2() = produce{
+    while(true) {
+//        delay(300)
+        send(&quot;from producer 2&quot;)
+    }
+}
+
+suspend fun selector(message1: ReceiveChannel&lt;String&gt;, message2: ReceiveChannel&lt;String&gt;) {
+    select&lt;Unit&gt; {
+        message1.onReceive { value -&gt; // in case there is a receive here it will always be executed
+            println(value)
+        }
+        message2.onReceive { value -&gt;
+            println(value)
+        }
+    }
+}
+
+fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    val m1 = producer1()
+    val m2 = producer2()
+
+    repeat(15) {
+        selector(m1, m2)
+    }
+}
+</code></pre>
+<h3 id="select-with-closed-channels">Select with closed Channels</h3>
+<ul>
+<li>use <code>onReceiveOrNull</code></li>
+</ul>
+<pre><code class="language-kotlin">suspend fun selector(message1: ReceiveChannel&lt;String&gt;, message2: ReceiveChannel&lt;String&gt;): String {
+    select&lt;String&gt; {
+        message1.onReceiveOrnUll { value -&gt;
+            value ?: &quot;Channel 1 is closed &quot;
+        }
+        message2.onReceiveOrnUll { value -&gt;
+            value ?: &quot;Channel 2 is closed &quot;
+        }
+    }
+}
+</code></pre>
+<h3 id="use-side-channels">Use side Channels</h3>
+<ul>
+<li>for non blocking send</li>
+<li>polling is possible</li>
+<li>timeout is possible</li>
+</ul>
+<pre><code class="language-kotlin">fun produceNumbers(side: SendChannel&lt;Int&gt;) = produce&lt;Int&gt; {
+    for (num in 1..10) {
+        delay(100)
+        select&lt;Unit&gt; {      // if I can send to one channel -&gt; send it
+            onSend(num){}
+            side.onSend(num){}
+        }
+    }
+    println(&quot;Done sending&quot;)
+}
+
+fun main1(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+
+    val side = Channel&lt;Int&gt;()
+
+    launch { side.consumeEach { println(&quot;side $it&quot;) }}
+
+    val producer = produceNumbers(side)
+
+    producer.consumeEach {
+        println(&quot;$it&quot;)
+        delay(500)
+    }
+}
+</code></pre>
+<ul>
+<li>result will be that most is consumed from side channel</li>
+</ul>
+<h3 id="timeout">Timeout</h3>
+<pre><code class="language-kotlin">fun producer() = produce {
+    var i = 0
+    while(True) {
+        delay(5000)
+        send(i++)
+    }
+}
+
+fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    var msg = producer()
+    select&lt;Unit&gt; {
+        msg.onReceive {
+            println(it)
+        }
+        onTimeout(4000) {
+            println(&quot;timed out&quot;)
+        }
+    }
+}
+</code></pre>
+<h2 id="actors">Actors</h2>
+<ul>
+<li>lightweight processes</li>
+<li>no shared state</li>
+<li>can communicate via messages</li>
+<li>are channels with state</li>
+<li>can protect data</li>
+<li>no state shared -&gt; no locks needed</li>
+<li>3 parts: coroutine, state, messages</li>
+</ul>
+<h3 id="actor-to-increment-a-counter-safely">Actor to increment a counter safely</h3>
+<pre><code class="language-kotlin">suspend fun run(context: CoroutineContext, numberOfJobs: Int, count: Int, action: suspend () -&gt; Unit): Long {
+    // action is repeated by each coroutine
+    return measureTimeMillis {
+        val jobs = List(numberOfJobs) {
+            launch(context) {
+                repeat(count) { action() }
+            }
+        }
+        jobs.forEach { it.join() }
+    }
+}
+
+sealed class CounterMsg
+object InitCounter : CounterMsg()
+object IncCounter : CounterMsg()
+class GetCounter(val response: CompletableDeferred&lt;Int&gt;) : CounterMsg()
+
+fun counterActor() = actor&lt;CounterMsg&gt; {
+    var counter = 0
+    for(msg in channel) {
+        when(msg) {
+            is InitCounter -&gt; counter = 0
+            is IncCounter -&gt; counter++
+            is GetCounter -&gt; msg.response.complete(counter)
+        }
+    }
+}
+
+fun main(args: Array&lt;String&gt;) = runBlocking&lt;Unit&gt; {
+    val jobs = 100
+    val count = 10000
+
+    val counter = counterActor()
+
+    counter.send(InitCounter)
+
+    val time = run(CommonPool, jobs, count) {
+        counter.send(IncCounter)
+    }
+
+    var response = CompletableDeferred&lt;Int&gt;()
+    counter.send(GetCounter(response))
+
+    println(&quot;Completed ${jobs * count} actions in $time ms&quot;)
+    println(&quot;result is ${response.await()}&quot;)
+}
+
+fun log(msg: String) = println(&quot;[${Thread.currentThread().name}] $msg&quot;)
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
