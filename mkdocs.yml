@@ -18,12 +18,13 @@ nav:
       - Coroutines: kotlin/coroutines.md
       - Java Completable Future: kotlin/java-async.md
   - Spring: spring/index.md
-  - SQL & Databases: sql-databases/index.md
+  - SQL & Databases:
+      - Overview: sql-databases/index.md
+      - JPA Query Optimization: sql-databases/jpa-optimization.md
+      - JPA Projections: sql-databases/jpa-projections.md
   - Shell: shell/index.md
   - IntelliJ: intellij/index.md
   - Networking:
       - Custom Domain for Email: networking/custom_comain_email-gmail.md
   - Linux:
       - Setting Up a Serial Terminal in Proxmox: linux/serial_terminal_proxmox.md
-  - SAP:
-      - Transactions: sap/transactions/index.md
