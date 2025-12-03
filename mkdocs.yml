@@ -15,9 +15,12 @@ nav:
   - Home: index.md
   - Kubernetes & Docker: k8s-docker/index.md
   - Kotlin, Java & Gradle:
+      - Overview: kotlin/index.md
       - Coroutines: kotlin/coroutines.md
       - Java Completable Future: kotlin/java-async.md
-  - Spring: spring/index.md
+  - Spring:
+      - Overview: spring/index.md
+      - HTTP Controller Best Practices: spring/http_controller_best_practices.md
   - SQL & Databases:
       - Overview: sql-databases/index.md
       - JPA Query Optimization: sql-databases/jpa-optimization.md
@@ -25,6 +28,11 @@ nav:
   - Shell: shell/index.md
   - IntelliJ: intellij/index.md
   - Networking:
+      - Overview: networking/index.md
       - Custom Domain for Email: networking/custom_comain_email-gmail.md
   - Linux:
+      - Overview: linux/index.md
       - Setting Up a Serial Terminal in Proxmox: linux/serial_terminal_proxmox.md
+  - SAP Systems:
+      - Overview: sap/index.md
+      - Important Transactions: sap/transactions/index.md
