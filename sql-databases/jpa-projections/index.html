@@ -1,0 +1,2033 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A collection of notes and thoughts on technical topics">
+      
+      
+      
+        <link rel="canonical" href="https://fgeck.github.io/knowledge-base/sql-databases/jpa-projections/">
+      
+      
+        <link rel="prev" href="../jpa-optimization/">
+      
+      
+        <link rel="next" href="../../shell/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>JPA Projections - fgeck's Knowledge Base</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jpa-projections-and-collections" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="fgeck&#39;s Knowledge Base" class="md-header__button md-logo" aria-label="fgeck's Knowledge Base" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            fgeck's Knowledge Base
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              JPA Projections
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="fgeck&#39;s Knowledge Base" class="md-nav__button md-logo" aria-label="fgeck's Knowledge Base" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    fgeck's Knowledge Base
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../k8s-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin, Java & Gradle
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kotlin, Java & Gradle
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kotlin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kotlin/coroutines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coroutines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kotlin/java-async/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java Completable Future
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Spring
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spring/http_controller_best_practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP Controller Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL & Databases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SQL & Databases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jpa-optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA Query Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA Projections
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA Projections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Are Projections?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interface Projections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interface Projections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-with-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working with Collections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Working with Collections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Problem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution-separate-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution: Separate Queries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-entities-with-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple Entities with Collections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multiple Entities with Collections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#avoiding-n1-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avoiding N+1 Queries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-based-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class-Based Projections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#projection-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Projection Comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-jpql-with-join-fetch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative: JPQL with JOIN FETCH
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intellij/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IntelliJ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/custom_comain_email-gmail/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Domain for Email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/serial_terminal_proxmox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting Up a Serial Terminal in Proxmox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAP Systems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SAP Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sap/transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Important Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-are-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Are Projections?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interface Projections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interface Projections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-with-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working with Collections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Working with Collections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Problem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution-separate-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution: Separate Queries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-entities-with-collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple Entities with Collections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multiple Entities with Collections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#avoiding-n1-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avoiding N+1 Queries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-based-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Class-Based Projections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#projection-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Projection Comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-jpql-with-join-fetch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative: JPQL with JOIN FETCH
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="jpa-projections-and-collections">JPA Projections and Collections</h1>
+<p>Guide to using projections effectively with Spring Data JPA.</p>
+<h2 id="what-are-projections">What Are Projections?</h2>
+<p>Projections allow you to load only specific fields instead of full entities, improving performance for read-only operations.</p>
+<h2 id="interface-projections">Interface Projections</h2>
+<h3 id="basic-example">Basic Example</h3>
+<pre><code class="language-kotlin">@Query(
+    nativeQuery = true,
+    value = &quot;&quot;&quot;
+        select
+            p.id as productId,
+            p.name as productName,
+            p.price as price,
+            c.name as categoryName
+        from products p
+        inner join categories c on p.category_id = c.id
+        where p.id = :id
+    &quot;&quot;&quot;
+)
+fun findProductDetails(id: Long): ProductDetails?
+
+interface ProductDetails {
+    val productId: Long
+    val productName: String
+    val price: BigDecimal
+    val categoryName: String
+}
+</code></pre>
+<h3 id="when-to-use">When to Use</h3>
+<p>✅ Read-only operations
+✅ API responses and DTOs
+✅ Performance-critical queries
+✅ Only need specific fields
+✅ Joining multiple tables</p>
+<h3 id="limitations">Limitations</h3>
+<p>❌ Cannot contain collections directly
+❌ Cannot modify and save back
+❌ Only works with flat result sets</p>
+<h2 id="working-with-collections">Working with Collections</h2>
+<h3 id="the-problem">The Problem</h3>
+<p>This does <strong>NOT</strong> work:</p>
+<pre><code class="language-kotlin">// ❌ WRONG - Cannot do this with native SQL projections
+interface ProductDetails {
+    val productName: String
+    val reviews: List&lt;ReviewProjection&gt;
+}
+</code></pre>
+<h3 id="solution-separate-queries">Solution: Separate Queries</h3>
+<p><strong>Repository Layer:</strong></p>
+<pre><code class="language-kotlin">// Query 1: Product projection
+@Query(
+    nativeQuery = true,
+    value = &quot;&quot;&quot;
+        select
+            p.id as productId,
+            p.name as productName,
+            p.price as price
+        from products p
+        where p.id = :id
+    &quot;&quot;&quot;
+)
+fun findProductSummary(id: Long): ProductSummary?
+
+interface ProductSummary {
+    val productId: Long
+    val productName: String
+    val price: BigDecimal
+}
+
+// Query 2: Reviews projection
+@Query(
+    nativeQuery = true,
+    value = &quot;&quot;&quot;
+        select
+            r.id as reviewId,
+            r.product_id as productId,
+            r.rating as rating,
+            r.comment as comment
+        from reviews r
+        where r.product_id = :productId
+        order by r.created_date desc
+    &quot;&quot;&quot;
+)
+fun findReviewsByProductId(productId: Long): List&lt;ReviewProjection&gt;
+
+interface ReviewProjection {
+    val reviewId: Long
+    val productId: Long
+    val rating: Int
+    val comment: String
+}
+</code></pre>
+<p><strong>Service Layer:</strong></p>
+<pre><code class="language-kotlin">@Service
+class ProductService(
+    private val productRepository: ProductRepository,
+    private val reviewRepository: ReviewRepository
+) {
+    fun getProductWithReviews(id: Long): ProductWithReviewsDto {
+        // Query 1: Get product
+        val product = productRepository.findProductSummary(id)
+            ?: throw NotFoundException(&quot;Product not found: $id&quot;)
+
+        // Query 2: Get reviews
+        val reviews = reviewRepository.findReviewsByProductId(id)
+
+        // Combine in DTO
+        return ProductWithReviewsDto(
+            productId = product.productId,
+            productName = product.productName,
+            price = product.price,
+            reviews = reviews.map {
+                ReviewDto(
+                    id = it.reviewId,
+                    rating = it.rating,
+                    comment = it.comment
+                )
+            }
+        )
+    }
+}
+
+data class ProductWithReviewsDto(
+    val productId: Long,
+    val productName: String,
+    val price: BigDecimal,
+    val reviews: List&lt;ReviewDto&gt;
+)
+
+data class ReviewDto(
+    val id: Long,
+    val rating: Int,
+    val comment: String
+)
+</code></pre>
+<h2 id="multiple-entities-with-collections">Multiple Entities with Collections</h2>
+<h3 id="avoiding-n1-queries">Avoiding N+1 Queries</h3>
+<pre><code class="language-kotlin">@Service
+class ProductService(
+    private val productRepository: ProductRepository,
+    private val reviewRepository: ReviewRepository
+) {
+    fun getMultipleProductsWithReviews(
+        categoryId: Long
+    ): List&lt;ProductWithReviewsDto&gt; {
+        // Query 1: Get all products
+        val products = productRepository.findByCategory(categoryId)
+
+        if (products.isEmpty()) return emptyList()
+
+        val productIds = products.map { it.productId }
+
+        // Query 2: Get ALL reviews for ALL products in ONE query
+        val allReviews = reviewRepository.findByProductIds(productIds)
+
+        // Group reviews by product ID in memory
+        val reviewsByProduct = allReviews.groupBy { it.productId }
+
+        // Combine
+        return products.map { product -&gt;
+            val reviews = reviewsByProduct[product.productId] ?: emptyList()
+
+            ProductWithReviewsDto(
+                productId = product.productId,
+                productName = product.productName,
+                price = product.price,
+                reviews = reviews.map { ReviewDto(it.reviewId, it.rating, it.comment) }
+            )
+        }
+    }
+}
+
+// Bulk query repository method
+@Query(
+    nativeQuery = true,
+    value = &quot;&quot;&quot;
+        select
+            r.id as reviewId,
+            r.product_id as productId,
+            r.rating as rating,
+            r.comment as comment
+        from reviews r
+        where r.product_id in :productIds
+        order by r.created_date desc
+    &quot;&quot;&quot;
+)
+fun findByProductIds(productIds: List&lt;Long&gt;): List&lt;ReviewProjection&gt;
+</code></pre>
+<p><strong>Key Points:</strong>
+- 2 queries total (not N+1)
+- First query gets all products
+- Second query gets all reviews using IN clause
+- Group in memory using <code>groupBy</code></p>
+<h2 id="class-based-projections">Class-Based Projections</h2>
+<p>Alternative to interface projections using JPQL:</p>
+<pre><code class="language-kotlin">data class ProductDto(
+    val id: Long,
+    val name: String,
+    val price: BigDecimal,
+    val categoryName: String
+)
+
+@Query(&quot;&quot;&quot;
+    select new com.example.ProductDto(
+        p.id,
+        p.name,
+        p.price,
+        p.category.name
+    )
+    from Product p
+    where p.id = :id
+&quot;&quot;&quot;)
+fun findProductDto(id: Long): ProductDto?
+</code></pre>
+<p><strong>When to Use:</strong>
+- Need immutable DTOs
+- Type safety is important
+- JPQL is sufficient (not native SQL)</p>
+<p><strong>Limitations:</strong>
+- Only works with JPQL (not native SQL)
+- Cannot contain collections</p>
+<h2 id="projection-comparison">Projection Comparison</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Interface</th>
+<th>Class DTO</th>
+<th>Full Entity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SQL Type</strong></td>
+<td>Native or JPQL</td>
+<td>JPQL only</td>
+<td>JPQL</td>
+</tr>
+<tr>
+<td><strong>Collections</strong></td>
+<td>❌ No</td>
+<td>❌ No</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>⚡ Fast</td>
+<td>⚡ Fast</td>
+<td>Slower</td>
+</tr>
+<tr>
+<td><strong>Modifiable</strong></td>
+<td>❌ No</td>
+<td>❌ No</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td><strong>Use Case</strong></td>
+<td>Read-only</td>
+<td>Read-only DTOs</td>
+<td>Modifications</td>
+</tr>
+</tbody>
+</table>
+<h2 id="complete-example">Complete Example</h2>
+<p>Here's a full working example with generic entities:</p>
+<pre><code class="language-kotlin">// Entities
+@Entity
+@Table(name = &quot;products&quot;)
+class Product(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
+    var name: String,
+    var price: BigDecimal,
+
+    @ManyToOne
+    @JoinColumn(name = &quot;category_id&quot;)
+    var category: Category,
+
+    @OneToMany(
+        mappedBy = &quot;product&quot;,
+        fetch = FetchType.LAZY
+    )
+    @BatchSize(size = 50)
+    var reviews: MutableSet&lt;Review&gt; = mutableSetOf()
+)
+
+@Entity
+@Table(name = &quot;reviews&quot;)
+class Review(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
+    @ManyToOne
+    @JoinColumn(name = &quot;product_id&quot;)
+    var product: Product,
+
+    var rating: Int,
+    var comment: String,
+    var createdDate: LocalDateTime = LocalDateTime.now()
+)
+
+// Repository
+interface ProductRepository : JpaRepository&lt;Product, Long&gt; {
+
+    @Query(
+        nativeQuery = true,
+        value = &quot;&quot;&quot;
+            select
+                p.id as productId,
+                p.name as productName,
+                p.price as price,
+                c.name as categoryName
+            from products p
+            inner join categories c on p.category_id = c.id
+            where p.category_id = :categoryId
+        &quot;&quot;&quot;
+    )
+    fun findProductsByCategory(categoryId: Long): List&lt;ProductSummary&gt;
+
+    interface ProductSummary {
+        val productId: Long
+        val productName: String
+        val price: BigDecimal
+        val categoryName: String
+    }
+}
+
+interface ReviewRepository : JpaRepository&lt;Review, Long&gt; {
+
+    @Query(
+        nativeQuery = true,
+        value = &quot;&quot;&quot;
+            select
+                r.id as reviewId,
+                r.product_id as productId,
+                r.rating as rating,
+                r.comment as comment,
+                r.created_date as createdDate
+            from reviews r
+            where r.product_id in :productIds
+            order by r.created_date desc
+        &quot;&quot;&quot;
+    )
+    fun findByProductIds(productIds: List&lt;Long&gt;): List&lt;ReviewSummary&gt;
+
+    interface ReviewSummary {
+        val reviewId: Long
+        val productId: Long
+        val rating: Int
+        val comment: String
+        val createdDate: LocalDateTime
+    }
+}
+
+// Service
+@Service
+class ProductService(
+    private val productRepository: ProductRepository,
+    private val reviewRepository: ReviewRepository
+) {
+
+    fun getProductsByCategoryWithReviews(
+        categoryId: Long
+    ): List&lt;ProductWithReviewsDto&gt; {
+        // Query 1: Get products
+        val products = productRepository.findProductsByCategory(categoryId)
+
+        if (products.isEmpty()) return emptyList()
+
+        // Query 2: Get all reviews in one query
+        val productIds = products.map { it.productId }
+        val allReviews = reviewRepository.findByProductIds(productIds)
+        val reviewsByProduct = allReviews.groupBy { it.productId }
+
+        // Combine
+        return products.map { product -&gt;
+            ProductWithReviewsDto(
+                id = product.productId,
+                name = product.productName,
+                price = product.price,
+                categoryName = product.categoryName,
+                reviews = reviewsByProduct[product.productId]
+                    ?.map { ReviewDto(it.reviewId, it.rating, it.comment) }
+                    ?: emptyList()
+            )
+        }
+    }
+}
+
+// DTOs
+data class ProductWithReviewsDto(
+    val id: Long,
+    val name: String,
+    val price: BigDecimal,
+    val categoryName: String,
+    val reviews: List&lt;ReviewDto&gt;
+)
+
+data class ReviewDto(
+    val id: Long,
+    val rating: Int,
+    val comment: String
+)
+</code></pre>
+<h2 id="alternative-jpql-with-join-fetch">Alternative: JPQL with JOIN FETCH</h2>
+<p>If you don't need native SQL, JPQL with JOIN FETCH is simpler:</p>
+<pre><code class="language-kotlin">@Query(&quot;&quot;&quot;
+    select distinct p from Product p
+    join fetch p.category
+    left join fetch p.reviews
+    where p.id = :id
+&quot;&quot;&quot;)
+fun findByIdWithAll(id: Long): Product?
+</code></pre>
+<p><strong>Pros:</strong>
+- Single query gets everything
+- Returns full entities
+- Can modify and save</p>
+<p><strong>Cons:</strong>
+- Loads full entities (more data)
+- Entity management overhead
+- Not suitable for read-only DTOs</p>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Use projections for read-only operations</strong></li>
+<li>Faster queries</li>
+<li>Less memory</li>
+<li>
+<p>Better for APIs</p>
+</li>
+<li>
+<p><strong>Combine separate queries in service layer</strong></p>
+</li>
+<li>Repositories stay simple</li>
+<li>Easy to test</li>
+<li>
+<p>Clear separation of concerns</p>
+</li>
+<li>
+<p><strong>Use bulk queries with IN clause</strong></p>
+</li>
+<li>Avoids N+1 problems</li>
+<li>Efficient for multiple entities</li>
+<li>
+<p>Group results in memory</p>
+</li>
+<li>
+<p><strong>Keep DTOs simple</strong></p>
+</li>
+<li>Data classes work great</li>
+<li>Immutable when possible</li>
+<li>
+<p>Match your API needs</p>
+</li>
+<li>
+<p><strong>Index foreign keys</strong></p>
+</li>
+<li>Essential for good performance</li>
+<li>Especially for IN clauses</li>
+<li>Check query plans regularly</li>
+</ol>
+<h2 id="summary">Summary</h2>
+<p><strong>For collections with projections:</strong>
+- ✅ Use separate queries
+- ✅ Combine in service layer
+- ✅ Use bulk queries for multiple entities
+- ✅ Group results in memory
+- ❌ Don't try to include collections in projections
+- ❌ Don't query in loops</p>
+<p><strong>Performance comparison:</strong>
+- Interface projections: 2 queries, minimal data
+- JPQL JOIN FETCH: 1 query, full entities
+- No optimization: N+1 queries, disaster!</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1750 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A collection of notes and thoughts on technical topics">
+      
+      
+      
+        <link rel="canonical" href="https://fgeck.github.io/knowledge-base/spring/http_controller_best_practices/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../../sql-databases/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>HTTP Controller Best Practices - fgeck's Knowledge Base</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#http-controller-best-practices" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="fgeck&#39;s Knowledge Base" class="md-header__button md-logo" aria-label="fgeck's Knowledge Base" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            fgeck's Knowledge Base
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              HTTP Controller Best Practices
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="fgeck&#39;s Knowledge Base" class="md-nav__button md-logo" aria-label="fgeck's Knowledge Base" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    fgeck's Knowledge Base
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../k8s-docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Docker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kotlin, Java & Gradle
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kotlin, Java & Gradle
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kotlin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kotlin/coroutines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coroutines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kotlin/java-async/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java Completable Future
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Spring
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP Controller Best Practices
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTTP Controller Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#patch-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PATCH Requests
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PATCH Requests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-use-a-dto-with-nullable-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better: Use a DTO with Nullable Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-explicit-null-setting-field-to-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Explicit Null (Setting Field to Null)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-jackson-for-cleaner-null-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Jackson for Cleaner Null Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-merge-patch-rfc-7396" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Merge Patch (RFC 7396)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-on-patch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation on PATCH
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-controller-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Controller Best Practices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Controller Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#response-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idempotency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dont-return-entities-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Don't Return Entities Directly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-proper-http-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use Proper HTTP Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-negotiation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content Negotiation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL & Databases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SQL & Databases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-databases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-databases/jpa-optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA Query Optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sql-databases/jpa-projections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JPA Projections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intellij/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IntelliJ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/custom_comain_email-gmail/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Domain for Email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/serial_terminal_proxmox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setting Up a Serial Terminal in Proxmox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAP Systems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SAP Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sap/transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Important Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#patch-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PATCH Requests
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PATCH Requests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Implementation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-use-a-dto-with-nullable-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better: Use a DTO with Nullable Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-explicit-null-setting-field-to-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Explicit Null (Setting Field to Null)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-jackson-for-cleaner-null-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Jackson for Cleaner Null Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-merge-patch-rfc-7396" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Merge Patch (RFC 7396)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-on-patch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation on PATCH
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-controller-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Controller Best Practices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Controller Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#response-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Codes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idempotency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idempotency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dont-return-entities-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Don't Return Entities Directly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-proper-http-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use Proper HTTP Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-negotiation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content Negotiation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="http-controller-best-practices">HTTP Controller Best Practices</h1>
+<h2 id="patch-requests">PATCH Requests</h2>
+<p>PATCH is for partial updates. Unlike PUT (full replacement), PATCH only modifies specified fields.</p>
+<h3 id="basic-implementation">Basic Implementation</h3>
+<pre><code class="language-kotlin">@PatchMapping(&quot;/{id}&quot;)
+fun updateUser(
+    @PathVariable id: Long,
+    @RequestBody updates: Map&lt;String, Any&gt;
+): User {
+    val user = userRepository.findById(id).orElseThrow()
+    // Apply updates manually - not recommended for production
+    return userRepository.save(user)
+}
+</code></pre>
+<h3 id="better-use-a-dto-with-nullable-fields">Better: Use a DTO with Nullable Fields</h3>
+<pre><code class="language-kotlin">data class UserPatchDto(
+    val email: String? = null,
+    val name: String? = null,
+    val age: Int? = null
+)
+
+@PatchMapping(&quot;/{id}&quot;)
+fun updateUser(
+    @PathVariable id: Long,
+    @RequestBody @Valid patch: UserPatchDto
+): User {
+    val user = userRepository.findById(id).orElseThrow()
+
+    patch.email?.let { user.email = it }
+    patch.name?.let { user.name = it }
+    patch.age?.let { user.age = it }
+
+    return userRepository.save(user)
+}
+</code></pre>
+<p><strong>Key principle</strong>: <code>null</code> means "don't update", absence means "don't update", explicit value means "update to this value".</p>
+<h3 id="handling-explicit-null-setting-field-to-null">Handling Explicit Null (Setting Field to Null)</h3>
+<p>The problem: With nullable DTOs, you cannot distinguish:
+- Field not sent: <code>{}</code> → don't update email
+- Field sent as null: <code>{"email": null}</code> → set email to null</p>
+<p><strong>Solution: Use a custom deserializer with an Optional wrapper</strong></p>
+<pre><code class="language-kotlin">// Wrapper class to track if field was present
+data class Optional&lt;T&gt;(val value: T?) {
+    val isPresent: Boolean = true
+
+    companion object {
+        fun &lt;T&gt; absent() = Optional&lt;T&gt;(null).apply {
+            // Use reflection or custom marker to track absence
+        }
+    }
+}
+
+// Custom deserializer
+class OptionalDeserializer : JsonDeserializer&lt;Optional&lt;*&gt;&gt;() {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Optional&lt;*&gt; {
+        return if (p.currentToken == JsonToken.VALUE_NULL) {
+            Optional(null)  // Field present, value is null
+        } else {
+            Optional(p.readValueAs(Any::class.java))
+        }
+    }
+}
+
+data class UserPatchDto(
+    @JsonDeserialize(using = OptionalDeserializer::class)
+    val email: Optional&lt;String&gt;? = null,
+
+    @JsonDeserialize(using = OptionalDeserializer::class)
+    val name: Optional&lt;String&gt;? = null
+)
+
+@PatchMapping(&quot;/{id}&quot;)
+fun updateUser(
+    @PathVariable id: Long,
+    @RequestBody patch: UserPatchDto
+): User {
+    val user = userRepository.findById(id).orElseThrow()
+
+    // null = field not sent, don't update
+    // Optional(null) = field sent as null, set to null
+    // Optional(value) = field sent with value, update
+    patch.email?.let { user.email = it.value }
+    patch.name?.let { user.name = it.value }
+
+    return userRepository.save(user)
+}
+</code></pre>
+<p><strong>Request examples:</strong></p>
+<pre><code class="language-json">// Don't update email
+{&quot;name&quot;: &quot;John&quot;}
+
+// Set email to null
+{&quot;email&quot;: null, &quot;name&quot;: &quot;John&quot;}
+
+// Update email
+{&quot;email&quot;: &quot;new@example.com&quot;, &quot;name&quot;: &quot;John&quot;}
+</code></pre>
+<p><strong>Simpler alternative using Kotlin's reflection:</strong></p>
+<pre><code class="language-kotlin">import kotlin.reflect.full.memberProperties
+
+data class UserPatchDto(
+    val email: String? = null,
+    val name: String? = null,
+    val age: Int? = null
+)
+
+@PatchMapping(&quot;/{id}&quot;)
+fun updateUser(
+    @PathVariable id: Long,
+    @RequestBody patch: UserPatchDto,
+    request: HttpServletRequest
+): User {
+    val user = userRepository.findById(id).orElseThrow()
+
+    // Read raw JSON to check which fields were actually sent
+    val jsonBody = request.reader.readText()
+    val sentFields = ObjectMapper().readTree(jsonBody).fieldNames().asSequence().toSet()
+
+    if (&quot;email&quot; in sentFields) user.email = patch.email
+    if (&quot;name&quot; in sentFields) user.name = patch.name
+    if (&quot;age&quot; in sentFields) user.age = patch.age
+
+    return userRepository.save(user)
+}
+</code></pre>
+<h3 id="using-jackson-for-cleaner-null-handling">Using Jackson for Cleaner Null Handling</h3>
+<pre><code class="language-kotlin">@PatchMapping(&quot;/{id}&quot;)
+fun updateUser(
+    @PathVariable id: Long,
+    @RequestBody updates: JsonNode
+): User {
+    val user = userRepository.findById(id).orElseThrow()
+
+    updates.fields().forEach { (key, value) -&gt;
+        when (key) {
+            &quot;email&quot; -&gt; user.email = if (value.isNull) null else value.asText()
+            &quot;name&quot; -&gt; user.name = if (value.isNull) null else value.asText()
+            &quot;age&quot; -&gt; user.age = if (value.isNull) null else value.asInt()
+        }
+    }
+
+    return userRepository.save(user)
+}
+</code></pre>
+<h3 id="json-merge-patch-rfc-7396">JSON Merge Patch (RFC 7396)</h3>
+<p>Spring supports JSON Merge Patch with the correct content type:</p>
+<pre><code class="language-kotlin">@PatchMapping(&quot;/{id}&quot;, consumes = [&quot;application/merge-patch+json&quot;])
+fun mergePatchUser(
+    @PathVariable id: Long,
+    @RequestBody patch: UserPatchDto
+): User {
+    val user = userRepository.findById(id).orElseThrow()
+
+    // With merge-patch, explicit null means &quot;set to null&quot;
+    patch.email?.let { user.email = it }
+    patch.name?.let { user.name = it }
+
+    return userRepository.save(user)
+}
+</code></pre>
+<h3 id="validation-on-patch">Validation on PATCH</h3>
+<pre><code class="language-kotlin">data class UserPatchDto(
+    @field:Email
+    val email: String? = null,
+
+    @field:Size(min = 2, max = 50)
+    val name: String? = null,
+
+    @field:Min(0)
+    @field:Max(150)
+    val age: Int? = null
+)
+</code></pre>
+<p>Validation only runs on fields that are present in the request.</p>
+<h2 id="general-controller-best-practices">General Controller Best Practices</h2>
+<h3 id="response-codes">Response Codes</h3>
+<pre><code class="language-kotlin">@PatchMapping(&quot;/{id}&quot;)
+fun updateUser(@PathVariable id: Long, @RequestBody patch: UserPatchDto): ResponseEntity&lt;User&gt; {
+    val user = userRepository.findById(id).orElseThrow()
+    // apply updates
+    return ResponseEntity.ok(userRepository.save(user))
+}
+
+@PostMapping
+fun createUser(@RequestBody @Valid user: User): ResponseEntity&lt;User&gt; {
+    val created = userRepository.save(user)
+    return ResponseEntity
+        .created(URI.create(&quot;/users/${created.id}&quot;))
+        .body(created)
+}
+
+@DeleteMapping(&quot;/{id}&quot;)
+@ResponseStatus(HttpStatus.NO_CONTENT)
+fun deleteUser(@PathVariable id: Long) {
+    userRepository.deleteById(id)
+}
+</code></pre>
+<h3 id="idempotency">Idempotency</h3>
+<ul>
+<li><strong>GET, PUT, DELETE</strong>: Naturally idempotent</li>
+<li><strong>PATCH</strong>: Should be idempotent (applying same patch multiple times = same result)</li>
+<li><strong>POST</strong>: Not idempotent (creates new resource each time)</li>
+</ul>
+<h3 id="error-handling">Error Handling</h3>
+<pre><code class="language-kotlin">@ExceptionHandler(EntityNotFoundException::class)
+fun handleNotFound(e: EntityNotFoundException) =
+    ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse(e.message))
+
+@ExceptionHandler(MethodArgumentNotValidException::class)
+fun handleValidation(e: MethodArgumentNotValidException) =
+    ResponseEntity.badRequest().body(
+        ValidationErrorResponse(
+            e.bindingResult.fieldErrors.associate { it.field to it.defaultMessage }
+        )
+    )
+</code></pre>
+<h3 id="dont-return-entities-directly">Don't Return Entities Directly</h3>
+<p>Use DTOs to avoid:
+- Lazy loading issues (Jackson serialization triggering queries)
+- Exposing internal structure
+- Circular references</p>
+<pre><code class="language-kotlin">@GetMapping(&quot;/{id}&quot;)
+fun getUser(@PathVariable id: Long): UserDto {
+    return userRepository.findById(id)
+        .orElseThrow()
+        .toDto()
+}
+
+fun User.toDto() = UserDto(
+    id = id,
+    email = email,
+    name = name
+)
+</code></pre>
+<h3 id="use-proper-http-methods">Use Proper HTTP Methods</h3>
+<ul>
+<li><strong>GET</strong>: Read, no side effects, cacheable</li>
+<li><strong>POST</strong>: Create, non-idempotent</li>
+<li><strong>PUT</strong>: Full replacement, idempotent</li>
+<li><strong>PATCH</strong>: Partial update, idempotent</li>
+<li><strong>DELETE</strong>: Remove, idempotent</li>
+</ul>
+<h3 id="content-negotiation">Content Negotiation</h3>
+<pre><code class="language-kotlin">@GetMapping(&quot;/{id}&quot;, produces = [MediaType.APPLICATION_JSON_VALUE])
+fun getUserJson(@PathVariable id: Long): UserDto = // ...
+
+@GetMapping(&quot;/{id}&quot;, produces = [MediaType.APPLICATION_XML_VALUE])
+fun getUserXml(@PathVariable id: Long): UserDto = // ...
+</code></pre>
+<p>Or let Spring handle it automatically based on <code>Accept</code> header.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
